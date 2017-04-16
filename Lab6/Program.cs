@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Lab6
@@ -13,50 +14,87 @@ namespace Lab6
             bool displayMenu = true;
             while (displayMenu)
             {
-               
+
                 displayMenu = MainMenu();
-                
+
             }
         }
 
         static void PigLatin()
         {
 
-            Char[] vowels = { 'e', 'u', 'i', 'o', 'a', };
-            Console.WriteLine("enter the word");
+            //user input
 
-            string WordInput = Console.ReadLine();
+            Console.Write("Enter a line to be translated: ");
 
-            Console.Clear();
+            string input = Console.ReadLine();
 
-            string Mystring = WordInput.ToLower();
+            //Validation for numbers and lengh.
 
-            Console.WriteLine("------------------------------");
-
-            Mystring.IndexOfAny(vowels);
-
-            if ((Mystring.IndexOfAny(vowels) > 0))
+            while ((input.Length <= 1)) //(!Regex.IsMatch(input, @"([^a-zA-Z0-9]|^\s)")))*/
             {
-
-                int FirstVowel = Mystring.IndexOfAny(vowels);
-
-                Mystring.Substring(FirstVowel);
-                string FirstConst = Mystring.Substring(0, FirstVowel);
-
-                string MyStringChange = Mystring.Substring(FirstVowel) + FirstConst + "ay";
-                //Console.WriteLine("the word starts with a Consonant");
-                Console.WriteLine("In Pig Latin {0} would be: {1} ", WordInput, MyStringChange);
+                Console.WriteLine("not a valid entry, try again");
+                input = Console.ReadLine();
             }
-            else
+
+            string mySentence = input.ToLower();
+
+            //Seperate each word to translate each
+
+            string[] words = mySentence.Split(' ');
+
+            Console.WriteLine("that translates to: ");
+
+            //translate each word in the sentence with a foreach iteration
+            //and console.write them
+
+            foreach (var Word in words)
+
             {
-                string ChangeString = Mystring;
 
-                ChangeString = Mystring + "way";
+                {
 
-                Console.WriteLine("In Pig Latin {0} would be: {1} ", WordInput, ChangeString);
+                    Char[] vowels = { 'e', 'u', 'i', 'o', 'a', };
+
+                    Word.IndexOfAny(vowels);
+
+                    //this is to keep numbers unchanged
+                    int n;
+                    bool isNumeric = int.TryParse(Word, out n);
+                    if (isNumeric)
+                    {
+                        Console.Write(n + " ");
+                    }
+
+                    else if ((Word.IndexOfAny(vowels) > 0))
+                    {
+                        //Console.WriteLine("the word starts with a Consonant");
+
+                        int FirstVowel = Word.IndexOfAny(vowels);
+
+                        Word.Substring(FirstVowel);
+                        string FirstConst = Word.Substring(0, FirstVowel);
+
+                        string MyStringChange = Word.Substring(FirstVowel) + FirstConst + "ay";
+
+                        Console.Write(MyStringChange + " ");
+                    }
+
+                    else
+                    //the word starts with a vowel
+                    {
+                        string ChangeString = Word;
+
+                        ChangeString = Word + "way";
+
+                        Console.Write(ChangeString + " ");
+                    }
+
+                }
+                
             }
             Console.WriteLine();
-            
+            Console.WriteLine("----------------------");
         }
         public static int GetValidInteger()
         {
@@ -96,25 +134,27 @@ namespace Lab6
         public static bool MainMenu()
         {
             Console.WriteLine("Choose an option");
-            Console.WriteLine("1) Translate a word into Pig Latin");
+            Console.WriteLine("1) Translate a line into Pig Latin");
             Console.WriteLine("2) Quit");
-            
+
 
             int userInput = RangeValidator(1, 2);
 
             if (userInput == 1)
             {
+                Console.Clear();
                 PigLatin();
                 return true;
             }
             else if (userInput == 2)
             {
-                Console.WriteLine("option 2");
+                Console.Clear();
                 return false;
             }
-            
+
             else
             {
+
                 return true;
             }
 
